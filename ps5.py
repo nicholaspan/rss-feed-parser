@@ -81,6 +81,8 @@ class NewsStory(object):
 #======================
 
 class Trigger(object):
+    """ Abstract superclass for Triggers.
+        Provides an evaluate() method that accepts NewsStory object"""
     def evaluate(self, story):
         """
         Returns True if an alert should be generated
@@ -164,10 +166,47 @@ class DescriptionTrigger(PhraseTrigger):
 # Constructor:
 #        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
 #        Convert time from string to a datetime before saving it as an attribute.
+class TimeTrigger(Trigger):
+    """ Abstract class, TimeTrigger
+        Input: Time has to be STRING in EST in format of "%d %b %Y %H:%M:%S".
+        Example format: "08 Aug 1992 00:00:00"
+        TimeTrigger.time attribute will be type: DATETIME."""
+    def __init__(self, time):
+       est = pytz.timezone('US/Eastern') # Eastern time zone...
+       self.time = est.localize(datetime.strptime(time,'%d %b %Y %H:%M:%S')) 
+
+    def get_time(self):
+        return self.time
 
 # Problem 6
 # TODO: BeforeTrigger and AfterTrigger
+class BeforeTrigger(TimeTrigger):
+    """ Subclass BeforeTrigger
+    Input: Accepts two inputs: 
+        Time (string) in format "%d %b %Y %H:%M:%S".
+        story (NewsStory object)"""
+    def __init__(self, time):
+        TimeTrigger.__init__(self, time)
+    def evaluate(self, story):
+        print(story.get_title()+" was published at: "+datetime.strftime(story.get_pubdate(),'%d %b %Y %H:%M:%S'))
+        if self.get_time() > story.get_pubdate():
+            return True
+        else:
+            return False
 
+class AfterTrigger(TimeTrigger):
+    """ Subclass AfterTrigger
+    Input: Accepts two inputs: 
+        Time (string) in format "%d %b %Y %H:%M:%S".
+        story (NewsStory object)"""
+    def __init__(self, time):
+        TimeTrigger.__init__(self, time)
+    def evaluate(self, story):
+        print(story.get_title()+" was published at: "+datetime.strftime(story.get_pubdate(),'%d %b %Y %H:%M:%S'))
+        if self.get_time() < story.get_pubdate():
+            return True
+        else:
+            return False
 
 # COMPOSITE TRIGGERS
 
