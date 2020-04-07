@@ -134,7 +134,6 @@ class PhraseTrigger(Trigger):
             return False
 
 # Problem 3
-# TODO: Title Trigger
 
 class TitleTrigger(PhraseTrigger):
     def __init__(self, phrase):
@@ -147,7 +146,16 @@ class TitleTrigger(PhraseTrigger):
         return self.is_phrase_in(story.get_title())
 
 # Problem 4
-# TODO: DescriptionTrigger
+
+class DescriptionTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        PhraseTrigger.__init__(self, phrase)
+
+    def evaluate(self, story):
+        """ Accepts a NewsStory object as input...
+        This method will return True if particular phrase
+        is in the description of News Story..."""
+        return self.is_phrase_in(story.get_description())
 
 # TIME TRIGGERS
 
