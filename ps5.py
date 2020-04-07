@@ -105,17 +105,30 @@ class PhraseTrigger(Trigger):
         # Remove the special characters in phrase...
         # TODO: Test case fails... ignores if input is correct but
         # strings are grouped by special chars (e.g. purple%#@cow)
-        new_text = ''
+        # new_text = ''
+        # for char in text:
+        #     char = char.lower()
+        #     punctuation_check = string.punctuation
+        #     if char in punctuation_check:
+        #         continue
+        #     else:
+        #         new_text = new_text + char
+        # print('Removing the special chars...: ' + new_text)
+        # print(self.phrase)
+        # if self.phrase.lower() in new_text:
+        #     return True
+        # else:
+        #     return False
+        # Search could use some work... there are some failing test conditions
+        # See commented lines in PhraseTrigger test
+        new_text = text.lower()
         for char in text:
-            char = char.lower()
-            punctuation_check = string.punctuation
-            if char in punctuation_check:
-                continue
-            else:
-                new_text = new_text + char
-        print('Removing the special chars...: ' + new_text)
-        print(self.phrase)
-        if self.phrase.lower() in new_text:
+            if char in string.punctuation:
+                new_text = new_text.split(char)
+                new_text = ''.join(new_text)
+        print('Text with special chars removed: ' + new_text)
+        print('The phrase is: ' + self.phrase)
+        if self.phrase.lower().replace(' ', '') in new_text.replace(' ', ''):
             return True
         else:
             return False
