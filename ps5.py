@@ -62,6 +62,7 @@ class NewsStory(object):
         self.title = title
         self.description = description
         self.link = link
+        pubdate = pubdate.replace(tzinfo=pytz.timezone("EST"))
         self.pubdate = pubdate
 
     # Define getter methods
@@ -211,14 +212,31 @@ class AfterTrigger(TimeTrigger):
 # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
+
+class NotTrigger(Trigger):
+    # Take in a trigger object as an input param
+    def __init__(self, trigger):
+        self.trigger = trigger
+    def evaluate(self, story):
+        return not self.trigger.evaluate(story)
 
 # Problem 8
-# TODO: AndTrigger
+class AndTrigger(Trigger):
+    # Takes in two trigger objects as input params
+    def __init__(self, trigger1, trigger2):
+        self.trigger1 = trigger1
+        self.trigger2 = trigger2
+    def evaluate(self, story):
+        return self.trigger1.evaluate(story) and self.trigger2.evaluate(story)
 
 # Problem 9
-# TODO: OrTrigger
-
+class OrTrigger(Trigger):
+    # Takes in two trigger objects as input params
+    def __init__(self, trigger1, trigger2):
+        self.trigger1 = trigger1
+        self.trigger2 = trigger2
+    def evaluate(self, story):
+        return self.trigger1.evaluate(story) or self.trigger2.evaluate(story)
 
 #======================
 # Filtering
